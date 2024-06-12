@@ -7,11 +7,38 @@ import google.generativeai as genai
 
 class Gemini_Model:
     def __init__(self, model: str, api_key: str):
+        """
+        Initialize the model
+
+        :param model: the model to use
+        :param api_key: the api key to use
+        """
         genai.configure(api_key=api_key)
         self.gemini = genai.GenerativeModel(model)
 
-    def generate_text(self, prompt):
+        self.message_history = []
+
+    def generate_text(self, prompt: str) -> str | None:
+        """
+        Generate text based on a prompt
+
+        :param prompt: the prompt to generate text from
+
+        :return: the generated text
+        """
         completion = self.gemini.generate_content(prompt)
+        return completion.text
+
+    def converse(self, messages: list) -> str | None:
+        """
+        Converse with the model in a conversation-like pattern
+
+        :param messages: list of messages to converse with the model
+
+        :return: the model's response
+        """
+        completion = self.gemini.generate_content(messages)
+        self.message_history.append({"role": "model", "parts": [completion.text]})
         return completion.text
 
 
