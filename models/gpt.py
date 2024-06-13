@@ -97,12 +97,6 @@ class GPT_Model:
 
         return completion.choices[0].message.content
 
-    def run(self):
-        """
-        Run the model
-        """
-        return self.converse()
-
 
 if __name__ == "__main__":
 
@@ -127,4 +121,4 @@ if __name__ == "__main__":
     #
     # print(gpt.generate_text(prompt))
 
-    gpt.run()
+    gpt.converse()

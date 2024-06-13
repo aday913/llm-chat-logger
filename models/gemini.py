@@ -88,12 +88,6 @@ class Gemini_Model:
 
         return completion.text
 
-    def run(self):
-        """
-        Run the model
-        """
-        return self.converse()
-
 
 if __name__ == "__main__":
 
@@ -118,4 +112,4 @@ if __name__ == "__main__":
     #
     # print(gpt.generate_text(prompt))
 
-    gemini.run()
+    gemini.converse()
