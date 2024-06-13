@@ -101,7 +101,9 @@ if __name__ == "__main__":
     load_dotenv()
 
     # get api key
-    API_KEY: str = os.getenv("GEMINI_API_KEY")
+    API_KEY: str | None = os.getenv("GEMINI_API_KEY")
+    if API_KEY is None:
+        raise Exception("API key not found")
 
     # parse arguments
     parser = argparse.ArgumentParser()
