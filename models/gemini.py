@@ -95,7 +95,7 @@ class Gemini_Model:
         """
         Run the model
         """
-        _ = self.converse()
+        return self.converse()
 
 
 if __name__ == "__main__":
