@@ -33,7 +33,7 @@ class GPT_Model:
         )
         return completion.choices[0].message.content
 
-    def converse(self, message_history: list = []) -> list:
+    def converse(self, message_history: list = [], conversation: list = []) -> list:
         """
         Converse with the model in a conversation-like pattern
 
