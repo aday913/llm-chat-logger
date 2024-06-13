@@ -41,6 +41,7 @@ class GPT_Model:
 
         :return: the model's response
         """
+        conversation = []
         while True:
             user_prompt = self.get_user_input()
 
@@ -48,12 +49,14 @@ class GPT_Model:
                 return message_history
 
             message_history.append({"role": "user", "content": user_prompt})
+            conversation.append(["user", user_prompt])
 
             llm_response = self.get_model_response(message_history)
 
             print(llm_response)
 
             message_history.append({"role": "assistant", "content": llm_response})
+            conversation.append(["model", llm_response])
 
     def get_user_input(self):
         """
