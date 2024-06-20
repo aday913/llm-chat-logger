@@ -27,7 +27,7 @@ class Gemini_Model:
         completion = self.gemini.generate_content(prompt)
         return completion.text
 
-    def converse(self, message_history: list = [], conversation: list = []) -> list:
+    def converse(self, prompt: str = "", message_history: list = [], conversation: list = []) -> list:
         """
         Converse with the model in a conversation-like pattern
 
@@ -35,11 +35,14 @@ class Gemini_Model:
 
         :return: the user/model conversation
         """
+        conv_length = 0
         while True:
             user_prompt = self.get_user_input()
 
             if user_prompt is None:
                 return conversation
+            if conv_length == 0:
+                user_prompt = prompt + "\n" + user_prompt
 
             message_history.append({"role": "user", "parts": [user_prompt]})
             conversation.append(["user", user_prompt])
@@ -54,6 +57,7 @@ class Gemini_Model:
 
             message_history.append({"role": "model", "parts": [llm_response]})
             conversation.append(["model", llm_response])
+            conv_length += 1
 
     def get_user_input(self):
         """
