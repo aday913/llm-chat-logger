@@ -33,7 +33,7 @@ class Gemini_Model:
 
         :param messages: list of messages to converse with the model
 
-        :return: the model's response
+        :return: the user/model conversation
         """
         while True:
             user_prompt = self.get_user_input()
@@ -46,7 +46,11 @@ class Gemini_Model:
 
             llm_response = self.get_model_response(message_history)
 
+            print('-' * 50)
+
             print(llm_response)
+
+            print('-' * 50)
 
             message_history.append({"role": "model", "parts": [llm_response]})
             conversation.append(["model", llm_response])

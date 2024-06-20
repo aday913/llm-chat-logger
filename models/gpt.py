@@ -39,21 +39,25 @@ class GPT_Model:
 
         :param messages: list of messages to converse with the model
 
-        :return: the model's response
+        :return: a list of user/model messages back to back
         """
         conversation = []
         while True:
             user_prompt = self.get_user_input()
 
             if user_prompt is None:
-                return message_history
+                return conversation
 
             message_history.append({"role": "user", "content": user_prompt})
             conversation.append(["user", user_prompt])
 
             llm_response = self.get_model_response(message_history)
 
+            print('-' * 50)
+
             print(llm_response)
+
+            print('-' * 50)
 
             message_history.append({"role": "assistant", "content": llm_response})
             conversation.append(["model", llm_response])
