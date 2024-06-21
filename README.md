@@ -63,6 +63,11 @@ If you would like to specify the AI model or output file name, you can use the f
 python main.py --model gemini --output my-output-file.md
 ```
 
+You can also continue a conversation from a previous markdown file by using the following command:
+```bash
+python main.py --continue-file my-input-file
+```
+
 You will be prompted for an input with a colon ":" symbol. When you are ready for your input to be sent to the AI model, simply press enter 3 times. The AI model will then generate a response that will be printed on screen. Continue this process until you are finished with the conversation. When finished, either type "exit" or "quit" as an input, and the conversation will end. The output will be saved as a markdown file.
 
 ## Contributing
