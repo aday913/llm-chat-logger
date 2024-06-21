@@ -18,6 +18,13 @@ LLM_MODELS = [
 
 
 def save_conversation_to_file(conversation: list, output: str):
+    """
+    Save the conversation to a markdown file
+
+    :param conversation: the conversation as a list of lists. Each list contains the talker and the try:
+        
+    :param output: the output file path
+    """
     with open(output, "w") as f:
         for talker, message in conversation:
             f.write(f"*{str(talker).capitalize()}*:\n\n")
@@ -26,11 +33,47 @@ def save_conversation_to_file(conversation: list, output: str):
 
 
 def get_prompt_text(prompt: str) -> str:
+    """
+    Get the text of a prompt file
+
+    :param prompt: the prompt name (without the .md extension)
+
+    :return: the text of the prompt file
+    """
     text = """"""
     with open(f"prompts/{prompt}.md", "r") as f:
         for line in f:
             text += line.strip() + "\n"
     return text
+
+
+def parse_previous_conversation_file(file_path: str) -> list:
+    """
+    Parse a previous conversation file
+
+    :param file_path: the file path to the previous conversation file
+
+    :return: the conversation as a list of lists. Each list contains the talker and the text
+    """
+    conversation = []
+    full_text = """"""
+    with open(file_path, "r") as f:
+        for line in f:
+            full_text += line.strip() + "\n"
+
+    for message in full_text.split("---\n\n"):
+        if message:
+            if "*User*:" in message:
+                talker = "user"
+                text = message.replace("*User*:", "").strip()
+            elif "*Model*:" in message:
+                talker = "model"
+                text = message.replace("*Model*:", "").strip()
+            else:
+                raise ValueError(f"No talker found in message: {message}")
+            conversation.append([talker, text])
+
+    return conversation
 
 
 def main(
@@ -60,8 +103,20 @@ def main(
     prompt_text = get_prompt_text(prompt)
 
     # load previous conversation, if any
+    if continue_file:
+        previous_conversation = parse_previous_conversation_file(continue_file)
+        formatted_previous_conversation = llm.format_previous_conversation(
+            previous_conversation
+        )
+    else:
+        previous_conversation = []
+        formatted_previous_conversation = []
 
-    conversation = llm.converse(prompt=prompt_text)
+    conversation = llm.converse(
+        prompt=prompt_text,
+        message_history=formatted_previous_conversation,
+        conversation=previous_conversation,
+    )
     for talker, message in conversation:
         print(f"{talker.capitalize()}: {len(message)} characters")
 
