@@ -176,10 +176,8 @@ if __name__ == "__main__":
         raise FileNotFoundError(f"Prompt file 'prompts/{args.prompt}.md' not found")
     if args.continue_file and not os.path.exists(args.continue_file):
         raise FileNotFoundError(f"Continue file '{args.continue_file}' not found")
-    if args.continue_file and args.continue_file.endswith(".md"):
-        raise ValueError("Continue file should not end with .md")
     if args.continue_file:
-        args.output = args.continue_file + ".md"
+        args.output = args.continue_file
 
     main(
         openai_key=os.getenv("OPENAI_API_KEY"),
