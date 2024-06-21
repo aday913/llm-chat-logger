@@ -33,7 +33,27 @@ class GPT_Model:
         )
         return completion.choices[0].message.content
 
-    def converse(self, prompt: str = "", message_history: list = [], conversation: list = []) -> list:
+    def format_previous_conversation(self, conversation: list) -> list:
+        """
+        Format a previous conversation for the model
+
+        :param conversation: the conversation to format
+
+        :return: the formatted conversation
+        """
+        formatted_conversation = []
+        for talker, message in conversation:
+            if talker == "user":
+                formatted_conversation.append({"role": "user", "content": message})
+            elif talker == "model":
+                formatted_conversation.append({"role": "assistant", "content": message})
+            else:
+                raise ValueError(f"Invalid talker: {talker}")
+        return formatted_conversation
+
+    def converse(
+        self, prompt: str = "", message_history: list = [], conversation: list = []
+    ) -> list:
         """
         Converse with the model in a conversation-like pattern
 
@@ -55,11 +75,11 @@ class GPT_Model:
 
             llm_response = self.get_model_response(message_history)
 
-            print('-' * 50)
+            print("-" * 50)
 
             print(llm_response)
 
-            print('-' * 50)
+            print("-" * 50)
 
             message_history.append({"role": "assistant", "content": llm_response})
             conversation.append(["model", llm_response])
