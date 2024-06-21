@@ -61,7 +61,7 @@ class Gemini_Model:
 
             if user_prompt is None:
                 return conversation
-            if conv_length == 0:
+            if conv_length == 0 and message_history == []:
                 user_prompt = prompt + "\n" + user_prompt
 
             message_history.append({"role": "user", "parts": [user_prompt]})
