@@ -84,44 +84,47 @@ def main(
     output: str,
     continue_file: str | None,
 ):
-    if model == "gpt":
-        model = "gpt-4o"
-    elif model == "gemini":
-        model = "gemini-1.5-pro"
+    try:
+        if model == "gpt":
+            model = "gpt-4o"
+        elif model == "gemini":
+            model = "gemini-1.5-pro"
 
-    if model not in LLM_MODELS:
-        raise ValueError(f"Model '{model}' not found")
+        if model not in LLM_MODELS:
+            raise ValueError(f"Model '{model}' not found")
 
-    if model.startswith("gpt") and openai_key:
-        llm = GPT_Model(model=model, api_key=openai_key)
-    elif model.startswith("gemini") and gemini_key:
-        llm = Gemini_Model(model=model, api_key=gemini_key)
-    else:
-        raise ValueError("API key not found")
+        if model.startswith("gpt") and openai_key:
+            llm = GPT_Model(model=model, api_key=openai_key)
+        elif model.startswith("gemini") and gemini_key:
+            llm = Gemini_Model(model=model, api_key=gemini_key)
+        else:
+            raise ValueError("API key not found")
 
-    # load prompt
-    prompt_text = get_prompt_text(prompt)
+        # load prompt
+        prompt_text = get_prompt_text(prompt)
 
-    # load previous conversation, if any
-    if continue_file:
-        previous_conversation = parse_previous_conversation_file(continue_file)
-        formatted_previous_conversation = llm.format_previous_conversation(
-            previous_conversation
+        # load previous conversation, if any
+        if continue_file:
+            previous_conversation = parse_previous_conversation_file(continue_file)
+            formatted_previous_conversation = llm.format_previous_conversation(
+                previous_conversation
+            )
+        else:
+            previous_conversation = []
+            formatted_previous_conversation = []
+
+        conversation = llm.converse(
+            prompt=prompt_text,
+            message_history=formatted_previous_conversation,
+            conversation=previous_conversation,
         )
-    else:
-        previous_conversation = []
-        formatted_previous_conversation = []
+        # for talker, message in conversation:
+        #     print(f"{talker.capitalize()}: {len(message)} characters")
 
-    conversation = llm.converse(
-        prompt=prompt_text,
-        message_history=formatted_previous_conversation,
-        conversation=previous_conversation,
-    )
-    for talker, message in conversation:
-        print(f"{talker.capitalize()}: {len(message)} characters")
-
-    # save conversation to file
-    save_conversation_to_file(conversation, output)
+        # save conversation to file
+        save_conversation_to_file(conversation, output)
+    except KeyboardInterrupt:
+        print("Ctrl+C pressed. Exiting...")
 
 
 if __name__ == "__main__":
