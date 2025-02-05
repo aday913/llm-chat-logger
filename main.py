@@ -8,6 +8,10 @@ from models.gpt import GPT_Model
 
 LLM_MODELS = [
     "gpt-4o",
+    "gpt-4o-mini",
+    "o1",
+    "o1-mini",
+    "o3-mini",
     "gpt-4-turbo",
     "gpt-4",
     "gpt-3.5-turbo",
@@ -93,7 +97,7 @@ def main(
         if model not in LLM_MODELS:
             raise ValueError(f"Model '{model}' not found")
 
-        if model.startswith("gpt") and openai_key:
+        if (model.startswith("gpt") or model.startswith('o')) and openai_key:
             llm = GPT_Model(model=model, api_key=openai_key)
         elif model.startswith("gemini") and gemini_key:
             llm = Gemini_Model(model=model, api_key=gemini_key)
@@ -145,7 +149,7 @@ if __name__ == "__main__":
         "-m",
         "--model",
         type=str,
-        help="The model to use (gpt-4o, gpt-4-turbo, gpt-4, gpt-3.5-turbo, gemini-1.5-pro, gemini-1.5-flash, gemini-1.0-pro)",
+        help="The model to use (gpt-4o, gpt-4-turbo, gpt-4, gpt-3.5-turbo, o1, o1-mini, o3-mini, gemini-1.5-pro, gemini-1.5-flash, gemini-1.0-pro)",
         required=False,
         default="gpt-4o",
     )
